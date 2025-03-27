@@ -2,13 +2,11 @@ import * as fs from 'fs';
 import OpenAI from 'openai';
 
 interface Options {
-  imageFile: Express.Multer.File;
+  imageFileURL: string;
 }
 
 export const imageAnalyzeUseCase = async (openai: OpenAI, options: Options) => {
-  const { imageFile } = options;
-  const imageBuffer = fs.readFileSync(imageFile.path);
-  const base64Image = imageBuffer.toString('base64');
+  const { imageFileURL } = options; 
 
   const completion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -19,12 +17,13 @@ export const imageAnalyzeUseCase = async (openai: OpenAI, options: Options) => {
         {
           type: "image_url",
           image_url: {
-            url: `data:image/jpeg;base64,${base64Image}`,
+            url: imageFileURL,
+            detail: "low",
           },
         },
       ],
     }],
-    max_tokens: 500,
+    max_tokens: 300,
     response_format: {
       type: "json_schema",
       json_schema: {
