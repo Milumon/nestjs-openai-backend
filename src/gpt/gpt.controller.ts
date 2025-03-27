@@ -17,7 +17,7 @@ export class GptController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new FileTypeValidator({ fileType: '.(webp|jpeg|jpg)' }),
+          new FileTypeValidator({ fileType: '.(webp|jpeg|jpg|png)' }),
           new MaxFileSizeValidator({
             maxSize: 1000 * 1024 * 5,
             message: 'File is bigger than 5 mb ',

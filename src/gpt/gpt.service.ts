@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
     S3Client,
@@ -55,7 +55,7 @@ export class GptService {
     }) {
         try {
             const key = `${uuidv4()}`;
-            
+
             const command = new PutObjectCommand({
                 Bucket: this.configService.get('S3_BUCKET_NAME'),
                 Key: key,
@@ -103,13 +103,18 @@ export class GptService {
     }
 
     async imageAnalyzer(imageFile: Express.Multer.File) {
-        const imageFileURL = await this.uploadSingleFile({
-            file: imageFile,
-            isPublic: true,
-        });
-        if (!imageFileURL.url) {
-            throw new InternalServerErrorException('Error uploading file');
+        try {
+            const imageFileURL = await this.uploadSingleFile({
+                file: imageFile,
+                isPublic: true,
+            });
+            if (!imageFileURL.url) {
+                throw new InternalServerErrorException('Error uploading file');
+            }
+            return await imageAnalyzeUseCase(this.openai, { imageFileURL: imageFileURL.url });
+        } catch (error) {
+            Logger.error('Error analyzing image:', error);
+            throw new InternalServerErrorException('Error analyzing image');
         }
-        return await imageAnalyzeUseCase(this.openai, { imageFileURL: imageFileURL.url });
     }
 }
