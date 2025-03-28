@@ -43,7 +43,11 @@ export class GptService {
             },
             forcePathStyle: true,
         });
-
+        Logger.debug('S3 Client initialized');
+        Logger.debug('S3_REGION:', s3_region);
+        Logger.debug('S3_ACCESS_KEY:', accessKeyId);
+        Logger.debug('S3_SECRET_ACCESS_KEY:', secretAccessKey);
+        Logger.debug('S3_BUCKET_NAME:', process.env.S3_BUCKET_NAME);
     }
 
     async uploadSingleFile({
