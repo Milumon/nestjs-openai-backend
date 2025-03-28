@@ -67,8 +67,9 @@ export class GptService {
                     originalName: file.originalname,
                 },
             });
-            await this.client.send(command);
 
+            const result = await this.client.send(command);
+            Logger.debug('result:', result);
             return {
                 url: isPublic
                     ? (await this.getFileUrl(key)).url
@@ -77,6 +78,8 @@ export class GptService {
                 isPublic,
             };
         } catch (error) {
+            Logger.error('Error analyzing image:', error);
+
             throw new InternalServerErrorException(error);
         }
     }
