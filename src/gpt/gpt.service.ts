@@ -22,14 +22,14 @@ export class GptService {
     constructor(
     ) {
 
-        const s3_region = process.env.S3_REGION
+        const s3_region = 'us-east-1'
 
         if (!s3_region) {
             throw new Error('S3_REGION not found in environment variables');
         }
 
-        const accessKeyId = process.env.S3_ACCESS_KEY
-        const secretAccessKey = process.env.S3_SECRET_ACCESS_KEY
+        const accessKeyId = 'AKIA2M4RQ3F6CUKM4MOJ'
+        const secretAccessKey = '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'
 
         if (!accessKeyId || !secretAccessKey) {
             throw new Error('S3_ACCESS_KEY or S3_SECRET_ACCESS_KEY not found in environment variables');
