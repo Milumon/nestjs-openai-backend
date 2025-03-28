@@ -8,6 +8,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { v4 as uuidv4 } from 'uuid';
 import { imageAnalyzeUseCase } from './use-cases/image-analysis.use-case';
+
 import OpenAI from 'openai';
 
 
@@ -19,17 +20,16 @@ export class GptService {
     private client: S3Client;
 
     constructor(
-        private readonly configService: ConfigService,
     ) {
 
-        const s3_region = this.configService.get('S3_REGION');
+        const s3_region = process.env.S3_REGION
 
         if (!s3_region) {
             throw new Error('S3_REGION not found in environment variables');
         }
 
-        const accessKeyId = this.configService.get<string>('S3_ACCESS_KEY');
-        const secretAccessKey = this.configService.get<string>('S3_SECRET_ACCESS_KEY');
+        const accessKeyId = process.env.S3_ACCESS_KEY
+        const secretAccessKey = process.env.S3_SECRET_ACCESS_KEY
 
         if (!accessKeyId || !secretAccessKey) {
             throw new Error('S3_ACCESS_KEY or S3_SECRET_ACCESS_KEY not found in environment variables');
@@ -55,9 +55,10 @@ export class GptService {
     }) {
         try {
             const key = `${uuidv4()}`;
+            Logger.debug('key:', key);
 
             const command = new PutObjectCommand({
-                Bucket: this.configService.get('S3_BUCKET_NAME'),
+                Bucket: process.env.S3_BUCKET_NAME,
                 Key: key,
                 Body: file.buffer,
                 ContentType: file.mimetype,
@@ -81,14 +82,14 @@ export class GptService {
     }
 
     async getFileUrl(key: string) {
-        return { url: `https://${this.configService.get('S3_BUCKET_NAME')}.s3.amazonaws.com/${key}` };
+        return { url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${key}` };
     }
 
 
     async getPresignedSignedUrl(key: string) {
         try {
             const command = new GetObjectCommand({
-                Bucket: this.configService.get('S3_BUCKET_NAME'),
+                Bucket: process.env.S3_BUCKET_NAME,
                 Key: key,
             });
 
