@@ -22,14 +22,14 @@ export class GptService {
     constructor(
     ) {
 
-        const s3_region = 'us-east-1'
+        const s3_region = process.env.S3_REGION as string;
 
         if (!s3_region) {
             throw new Error('S3_REGION not found in environment variables');
         }
 
-        const accessKeyId = 'AKIA2M4RQ3F6CUKM4MOJ';
-        const secretAccessKey = '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'
+        const accessKeyId = process.env.S3_ACCESS_KEY as string;
+        const secretAccessKey = process.env.S3_SECRET_ACCESS_KEY as string;
 
         if (!accessKeyId || !secretAccessKey) {
             throw new Error('S3_ACCESS_KEY or S3_SECRET_ACCESS_KEY not found in environment variables');
@@ -44,11 +44,7 @@ export class GptService {
             },
             forcePathStyle: true,
         });
-        Logger.debug('S3 Client initialized');
-        Logger.debug('S3_REGION:', s3_region);
-        Logger.debug('S3_ACCESS_KEY:', accessKeyId);
-        Logger.debug('S3_SECRET_ACCESS_KEY:', secretAccessKey);
-        Logger.debug('S3_BUCKET_NAME:', process.env.S3_BUCKET_NAME);
+        Logger.debug('S3 Client initialized'); 
     }
 
     async uploadSingleFile({
