@@ -25,7 +25,7 @@ export const imageAnalyzeUseCase = async (openai: OpenAI, options: Options) => {
          - \`"isFraudCase": true\`  
           - \`"message": "Breve explicación de porqué consideras que es fraude"\`  
          - \`"nivel_riesgo": "Bajo" | "Medio" | "Alto"\`  
-          - \`"tips_seguridad": ["Consejos relacionados a los tips de seguridad del bcp usando la información de enlaces y correos seguros y Consejos generales sobre fraudes relacionados al tipo de fraude, todo con emojis", "Consejo 2"]\`  
+          - \`"tips_seguridad": ["Consejos relacionados a los tips de seguridad del bcp usando la información de enlaces y correos seguros y Consejos generales sobre fraudes relacionados al tipo de fraude, todo con un emoji al inicio", "Consejo 2"]\`  
 
               **Tips Seguridad BCP:**  
             Verifica siempre los remitentes. El BCP nunca te pedirá datos sensibles por mensaje o correo. ✉️
