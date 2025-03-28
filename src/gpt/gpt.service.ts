@@ -10,6 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { imageAnalyzeUseCase } from './use-cases/image-analysis.use-case';
 
 import OpenAI from 'openai';
+import { textAnalyzeUseCase } from './use-cases/text-analysis.use-case';
+import { TextAnalyzeDto } from './dtos/text-analysis.dto';
 
 
 @Injectable()
@@ -117,6 +119,15 @@ export class GptService {
                 throw new InternalServerErrorException('Error uploading file');
             }
             return await imageAnalyzeUseCase(this.openai, { imageFileURL: imageFileURL.url });
+        } catch (error) {
+            Logger.error('Error analyzing image:', error);
+            throw new InternalServerErrorException('Error analyzing image');
+        }
+    }
+
+    async textAnalyzer(textAnalyzeDto: TextAnalyzeDto) {
+        try { 
+            return await textAnalyzeUseCase(this.openai, { text: textAnalyzeDto.text });
         } catch (error) {
             Logger.error('Error analyzing image:', error);
             throw new InternalServerErrorException('Error analyzing image');

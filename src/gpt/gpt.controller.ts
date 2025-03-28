@@ -1,6 +1,7 @@
-import { Controller, FileTypeValidator, Get, Header, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, FileTypeValidator, Get, Header, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { GptService } from './gpt.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { TextAnalyzeDto } from './dtos/text-analysis.dto';
 @Controller('gpt')
 export class GptController {
   constructor(private readonly gptService: GptService) { }
@@ -29,6 +30,13 @@ export class GptController {
     file: Express.Multer.File,
   ) {
     return this.gptService.imageAnalyzer(file);
+  }
+
+  @Post('text-analyze')
+  async textAnalyzer(
+    @Body() textAnalyzeDto: TextAnalyzeDto,
+  ) {
+    return this.gptService.textAnalyzer(textAnalyzeDto);
   }
 
   @Get(':key')
