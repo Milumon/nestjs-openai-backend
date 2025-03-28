@@ -38,8 +38,9 @@ export class GptService {
         this.client = new S3Client({
             region: s3_region,
             credentials: {
-                accessKeyId,
-                secretAccessKey,
+                accessKeyId: accessKeyId,
+                secretAccessKey:
+                    secretAccessKey,
             },
             forcePathStyle: true,
         });
